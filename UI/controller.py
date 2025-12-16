@@ -1,5 +1,6 @@
 import flet as ft
 from UI.view import View
+from model import sentiero
 from model.model import Model
 
 
@@ -47,5 +48,27 @@ class Controller:
         self._view.page.update()
 
     """Implementare la parte di ricerca del cammino minimo"""
-    # TODO
+
+    def handle_cammino_minimo(self,e):
+
+        try:
+            soglia = float(self._view.txt_soglia.value)
+        except:
+            self._view.show_alert("Inserisci un numero valido per la soglia.")
+            return
+        percorsi_minimi, miglior_costo = self._model.getPercorsoMinimo(soglia)
+        self._view.lista_visualizzazione_3.controls.clear()
+        if not percorsi_minimi:
+            self._view.lista_visualizzazione_3.controls.append(ft.Text("Nessun cammino valido trovato."))
+
+        self._view.lista_visualizzazione_3.controls.append(ft.Text(f"Cammino minimo:"))
+        for u,v,peso in percorsi_minimi:
+            self._view.lista_visualizzazione_3.controls.append(ft.Text(f"{u.id} - {u.nome} → {v.id} - {v.nome} [peso: {peso:.2f}]"))
+
+        self._view.page.update()
+
+
+
+
+
 
